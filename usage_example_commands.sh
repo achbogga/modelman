@@ -1,0 +1,1 @@
+bash freeze_model.sh -f inception_resnet_v1 /home/caffe/achu/models/china_drinks_old_pipeline_new_data_20190210/inference_graph.pb 1065 /home/caffe/achu/models/china_drinks_old_pipeline_new_data_20190210/20190318-205823 /home/caffe/achu/models/china_drinks_old_pipeline_new_data_20190210/frozen_inception_resnet_v1.pb "embeddings"
