@@ -29,13 +29,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-
-import argparse
-# This sample uses a UFF ResNet50 Model to create a TensorRT Inference Engine
-import random
-from PIL import Image
-import numpy as np
-
 import pycuda.driver as cuda
 # This import causes pycuda to automatically
 # manage CUDA context creation and cleanup.
@@ -48,7 +41,7 @@ import os
 
 
 def rt_infer(uff_model_file):
-    # Build a TensorRT engine.
+    # Build a TensorRT engine given an uff model file path and perform inference
     with build_engine_uff(uff_model_file) as engine:
         # Inference is the same regardless of which parser is used to build the engine, since the model architecture is the same.
         # Allocate buffers and create a CUDA stream.

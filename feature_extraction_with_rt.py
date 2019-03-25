@@ -63,7 +63,7 @@ class ModelData(object):
 TRT_LOGGER = trt.Logger(trt.Logger.WARNING)
 
 
-def GiB(val):
+def get_workspace_size_in_gigs(val):
     return val * 1 << 30
 
 
@@ -104,7 +104,7 @@ def build_engine_uff(model_file):
     with trt.Builder(TRT_LOGGER) as builder, builder.create_network() as network, trt.UffParser() as parser:
         # Workspace size is the maximum amount of memory available to the builder while building an engine.
         # It should generally be set as high as possible.
-        builder.max_workspace_size = GiB(1)
+        builder.max_workspace_size = get_workspace_size_in_gigs(1)
         # We need to manually register the input and output nodes for UFF.
         parser.register_input(ModelData.INPUT_NAME, ModelData.INPUT_SHAPE)
         parser.register_output(ModelData.OUTPUT_NAME)
@@ -127,34 +127,12 @@ def load_normalized_test_case(test_image, pagelocked_buffer):
 
 
 def main(args):
-    # Set the data path to the directory that contains the trained models and test images for inference.
-    data_path = args.dataset_dir
-    data_files = [os.path.join(data_path, item) for item in ["binoculars.jpeg", "reflex_camera.jpeg",
-                                                             "tabby_tiger_cat.jpg", "class_labels.txt"]]
-    # Get test images, models and labels.
-    test_images = data_files[0:3]
-    uff_model_file, labels_file = data_files[2:]
-    labels = open(labels_file, 'r').read().split('\n')
-
-    # Build a TensorRT engine.
-    with build_engine_uff(uff_model_file) as engine:
-        # Inference is the same regardless of which parser is used to build the engine, since the model architecture is the same.
-        # Allocate buffers and create a CUDA stream.
-        h_input, d_input, h_output, d_output, stream = allocate_buffers(engine)
-        # Contexts are used to perform inference.
-        with engine.create_execution_context() as context:
-            # Load a normalized test case into the host input page-locked buffer.
-            test_image = random.choice(test_images)
-            test_case = load_normalized_test_case(test_image, h_input)
-            # Run the engine. The output will be a 1D tensor of length 1000, where each value represents the
-            # probability that the image corresponds to that label
-            do_inference(context, h_input, d_input, h_output, d_output, stream)
-            # We use the highest probability as our prediction. Its index corresponds to the predicted label.
-            pred = labels[np.argmax(h_output)]
-            if "_".join(pred.split()) in os.path.splitext(os.path.basename(test_case))[0]:
-                print("Correctly recognized " + test_case + " as " + pred)
-            else:
-                print("Incorrectly recognized " + test_case + " as " + pred)
+    if args.mode == 'infer':
+        # Perform inference, save the features and the engine file.
+        pass
+    else:
+        # Just save the engine file.
+        pass
 
 
 def parse_arguments(argv):

@@ -16,5 +16,6 @@
         "--ignored-classes=tensorrt, pycuda",
         "--extension-pkg-whitelist=tensorrt, pycuda"
     ],
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "files.eol": "\n"
 }
