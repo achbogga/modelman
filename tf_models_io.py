@@ -65,10 +65,10 @@ def get_model_filenames(model_dir):
 def get_image_paths(dataset_dir):
     # Reads all the image paths from dataset_dir
     sku_labels_str = [sku_label for sku_label in os.listdir(dataset_dir)
-                      if os.path.isdir(dataset_dir+'/'+sku_label)]
-    sku_paths = [dataset_dir+'/'+sku for sku in sku_labels_str]
+                      if os.path.isdir(dataset_dir + '/' + sku_label)]
+    sku_paths = [dataset_dir + '/' + sku for sku in sku_labels_str]
     image_paths = []
     for sku in sku_paths:
-        sku_image_names = [sku+'/'+f for f in os.listdir(sku)]
+        sku_image_names = [sku + '/' + f for f in os.listdir(sku)]
         image_paths += sku_image_names
     return image_paths

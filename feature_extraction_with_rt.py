@@ -128,7 +128,7 @@ def load_normalized_test_case(test_image, pagelocked_buffer):
 
 def main(args):
     # Set the data path to the directory that contains the trained models and test images for inference.
-    data_path = ModelData.MODEL_PATH
+    data_path = args.dataset_dir
     data_files = [os.path.join(data_path, item) for item in ["binoculars.jpeg", "reflex_camera.jpeg",
                                                              "tabby_tiger_cat.jpg", "class_labels.txt"]]
     # Get test images, models and labels.
@@ -160,13 +160,16 @@ def main(args):
 def parse_arguments(argv):
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('model_dir', type=str,
-                        help='Directory containing the metagraph (.meta) file \
-                            and the checkpoint (ckpt) file\
-                            containing model parameters')
-    parser.add_argument('output_file', type=str,
-                        help='Filename for the exported\
-                            graphdef protobuf (.pb)')
+    parser.add_argument('mode', type=str,
+                        help='The infer mode or save_engine mode')
+
+    parser.add_argument('dataset_dir', type=str,
+                        help='Directory containing the images to be \
+                            to be sent for the inference')
+    parser.add_argument('model_path', type=str,
+                        help='The path to the frozen uff file.')
+    parser.add_argument('output_dir', type=str,
+                        help='The output path to write the engine file to.')
     parser.add_argument('--output_node_names', type=str, nargs='+',
                         help='Output node names for the exported\
                             graphdef protobuf (.pb)',
