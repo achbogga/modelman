@@ -45,7 +45,6 @@ import tensorrt as trt
 
 import sys
 import os
-import common
 
 sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
@@ -62,6 +61,10 @@ class ModelData(object):
 # You can set the logger severity higher to suppress
 # messages (or lower to display more messages).
 TRT_LOGGER = trt.Logger(trt.Logger.WARNING)
+
+
+def GiB(val):
+    return val * 1 << 30
 
 
 def allocate_buffers(engine):
@@ -101,7 +104,7 @@ def build_engine_uff(model_file):
     with trt.Builder(TRT_LOGGER) as builder, builder.create_network() as network, trt.UffParser() as parser:
         # Workspace size is the maximum amount of memory available to the builder while building an engine.
         # It should generally be set as high as possible.
-        builder.max_workspace_size = common.GiB(1)
+        builder.max_workspace_size = GiB(1)
         # We need to manually register the input and output nodes for UFF.
         parser.register_input(ModelData.INPUT_NAME, ModelData.INPUT_SHAPE)
         parser.register_output(ModelData.OUTPUT_NAME)
@@ -123,13 +126,14 @@ def load_normalized_test_case(test_image, pagelocked_buffer):
     return test_image
 
 
-def main():
+def main(args):
     # Set the data path to the directory that contains the trained models and test images for inference.
-    data_path, data_files = common.find_sample_data(description="Runs a ResNet50 network with a TensorRT inference engine.", subfolder="resnet50", find_files=[
-                                                    "binoculars.jpeg", "reflex_camera.jpeg", "tabby_tiger_cat.jpg", ModelData.MODEL_PATH, "class_labels.txt"])
+    data_path = ModelData.MODEL_PATH
+    data_files = [os.path.join(data_path, item) for item in ["binoculars.jpeg", "reflex_camera.jpeg",
+                                                             "tabby_tiger_cat.jpg", "class_labels.txt"]]
     # Get test images, models and labels.
     test_images = data_files[0:3]
-    uff_model_file, labels_file = data_files[3:]
+    uff_model_file, labels_file = data_files[2:]
     labels = open(labels_file, 'r').read().split('\n')
 
     # Build a TensorRT engine.

@@ -28,7 +28,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from tf_models_io import get_image_paths, get_model_filenames
+from tf_models_io import get_image_paths, get_model_filenames, load_model
 from image_io import *
 import argparse
 import imageio
@@ -39,6 +39,7 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 from scipy.ndimage import zoom
 import sys
+import tensorflow as tf
 
 
 def parse_arguments(argv):
@@ -157,9 +158,7 @@ def extract_features(training_image_paths, model_dir, chunk_size=512,
                            for image_path in training_image_paths]
     if percentage < 1.0:
         print('percentage: ', percentage)
-        training_image_paths_split_1, training_image_paths_split_2,
-        training_sku_labels_split_1,
-        training_sku_labels_split_2 = train_test_split(
+        training_image_paths_split_1, training_image_paths_split_2, training_sku_labels_split_1, training_sku_labels_split_2 = train_test_split(
             training_image_paths, training_sku_labels,
             train_size=percentage, random_state=0)
     else:
