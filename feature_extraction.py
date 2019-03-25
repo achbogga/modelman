@@ -28,7 +28,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from tf_models_io import *
+from tf_models_io import get_image_paths, get_model_filenames
 from image_io import *
 import argparse
 import imageio
@@ -87,8 +87,8 @@ def get_embeddings(image_names, model_dir, chunk_size=500,
                 print('Total size: ', len(image_names))
                 images = np.asarray([prewhiten(imageio.imread(image_name))
                                      for image_name in image_names])
-                images = [zoom(im, [image_size/float(im.shape[0]),
-                                    image_size/float(im.shape[1]), 1.0])
+                images = [zoom(im, [image_size / float(im.shape[0]),
+                                    image_size / float(im.shape[1]), 1.0])
                           for im in images]
                 if phase_train_tensor:
                     feed_dict = {images_placeholder: images,
@@ -101,12 +101,12 @@ def get_embeddings(image_names, model_dir, chunk_size=500,
                 print('Total size: ', len(image_names))
                 i = 0
                 image_names_chunk = image_names[i:min(
-                    i+chunk_size, len(image_names))]
+                    i + chunk_size, len(image_names))]
                 images_chunk = np.asarray(
                     [prewhiten(imageio.imread(image_name))
                      for image_name in image_names_chunk])
-                images_chunk = [zoom(im, [image_size/float(im.shape[0]),
-                                          image_size/float(im.shape[1]), 1.0])
+                images_chunk = [zoom(im, [image_size / float(im.shape[0]),
+                                          image_size / float(im.shape[1]), 1.0])
                                 for im in images_chunk]
                 if phase_train_tensor:
                     feed_dict = {images_placeholder: images_chunk,
@@ -119,13 +119,13 @@ def get_embeddings(image_names, model_dir, chunk_size=500,
                 for i in range(i, len(image_names), chunk_size):
                     print('current chunk i: ', i)
                     image_names_chunk = image_names[i:min(
-                        i+chunk_size, len(image_names))]
+                        i + chunk_size, len(image_names))]
                     images_chunk = np.asarray(
                         [prewhiten(imageio.imread(image_name))
                          for image_name in image_names_chunk])
                     images_chunk = [zoom(
-                        im, [image_size/float(im.shape[0]),
-                             image_size/float(im.shape[1]), 1.0])
+                        im, [image_size / float(im.shape[0]),
+                             image_size / float(im.shape[1]), 1.0])
                         for im in images_chunk]
                     if phase_train_tensor:
                         feed_dict = {images_placeholder: images_chunk,
@@ -192,8 +192,8 @@ def save_features(output_dir, percentage, dataset_dir, model_dir, prefix,
                                      image_size=image_size)
     training_embeddings = training_data[0]
     training_labels = training_data[1]
-    np.save(output_dir+'/'+prefix+'_features.npy', training_embeddings)
-    np.save(output_dir+'/'+prefix+'_labels.npy', training_labels)
+    np.save(output_dir + '/' + prefix + '_features.npy', training_embeddings)
+    np.save(output_dir + '/' + prefix + '_labels.npy', training_labels)
 
 
 def main(args):
