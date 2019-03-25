@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+python freeze_tf_model.py "C:\Users\Achyut Sarma B\Desktop\Clobotics Misc\models\best_performing_embedding_model_center_loss" "C:\Users\Achyut Sarma B\Desktop\Clobotics Misc\models\best_performing_embedding_model_frozen\frozen_inception_resnet_v1.pb" --output_node_names "InceptionResnetV1/Logits/embeddings" "InceptionResnetV1/Logits/Predictions"
