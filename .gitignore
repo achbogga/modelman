@@ -105,3 +105,6 @@ clobotics/
 *.png
 *.jpeg
 models/
+
+#example usage file
+usage_example_commands.sh
