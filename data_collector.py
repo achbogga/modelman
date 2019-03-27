@@ -71,7 +71,7 @@ def prepare_images(args):
         try:
             temp_df = pd.read_csv(n, index_col=False, encoding='utf-8')
         except IOError:
-            print (n + ' File not found; skipping it!')
+            print(n + ' File not found; skipping it!')
             continue
         temp_sku_ids = temp_df.SystemId.tolist()
         # print ('Debug2: ',temp_sku_ids[0:3])
